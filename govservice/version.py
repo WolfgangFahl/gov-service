@@ -16,7 +16,7 @@ class Version:
     """
 
     name: str = "gov-service"
-    version: str = govservice.__version
+    version: str = govservice.__version__
     date: str = "2026-03-14"
     updated: str = "2026-03-14"
     description: str = "A local Python service acting as an alternative GOV server"
