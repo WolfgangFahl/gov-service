@@ -18,3 +18,9 @@ scripts/test      # python3 -m unittest discover
 - Google-style docstrings, module header: `Created on YYYY-MM-DD\n\n@author: wf`
 - Line length: 120 (black), imports: isort three-group layout
 - Run `scripts/blackisort` before committing
+
+## Python Conventions
+- Never use `return expr` for multi-line strings — assign to a variable first, then `return` it on its own line
+- Multi-line f-strings use `"""` triple quotes assigned to a variable, never a tuple of f-string fragments
+- Build HTML with `html = f"..."` / `html += f"..."`, return `html` — no HTML outside `as_html` methods
+- No bare `return expression` for anything longer than a single short line

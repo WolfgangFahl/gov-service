@@ -3,6 +3,7 @@ Created on 2026-03-14
 
 @author: wf
 """
+
 import sys
 
 import uvicorn
@@ -24,6 +25,9 @@ class GovServiceCmd(BaseCmd):
         super().__init__(version.Version())
 
     def add_arguments(self, parser):
+        """
+        add arguments to the given parser
+        """
         super().add_arguments(parser)
         parser.add_argument("--host", default="0.0.0.0", help="host to run the server on")
         parser.add_argument("--port", type=int, default=8000, help="port to run the server on")
@@ -47,11 +51,14 @@ class GovServiceCmd(BaseCmd):
             port = getattr(args, "port", 8000)
             uvicorn.run(service.app, host=host, port=port)
             return True
-            
+
         return False
 
 
 def main(argv: list | None = None):
+    """
+    CLI entry point
+    """
     cmd = GovServiceCmd()
     exit_code = cmd.run(argv)
     return exit_code

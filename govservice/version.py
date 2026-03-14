@@ -3,6 +3,7 @@ Created on 2026-03-14
 
 @author: wf
 """
+
 from dataclasses import dataclass
 
 import govservice
@@ -13,8 +14,9 @@ class Version:
     """
     Version information for GOV-Service
     """
+
     name: str = "gov-service"
-    version: str = "0.0.1"
+    version: str = govservice.__version
     date: str = "2026-03-14"
     updated: str = "2026-03-14"
     description: str = "A local Python service acting as an alternative GOV server"

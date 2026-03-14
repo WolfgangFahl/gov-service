@@ -25,9 +25,25 @@ scripts/gov_query -qn NameByGovId --params gov_id=SCHERGJO54EJ -f json
 When the service is running (e.g. via `scripts/startup --gov`), you can test the REST API endpoint directly using curl:
 
 ```bash
-# Test the /item/show MVP endpoint for Schönberg
+# HTML (default)
 curl -s http://localhost:8000/item/show/SCHERGJO54EJ
+
+# JSON via Accept header
+curl -s -H "Accept: application/json" http://localhost:8000/item/show/SCHERGJO54EJ
+
+# YAML via Accept header
+curl -s -H "Accept: application/x-yaml" http://localhost:8000/item/show/SCHERGJO54EJ
+
+# JSON via format query parameter (overrides Accept header)
+curl -s "http://localhost:8000/item/show/SCHERGJO54EJ?format=json"
 ```
+
+## API Documentation
+
+The service is built with [FastAPI](https://fastapi.tiangolo.com/), which automatically provides interactive API documentation when the server is running:
+
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
 
 ## Docs
 [GOV-Service on GOV-Wiki](https://gov-wiki.genealogy.net/index.php/GOV-Service)
