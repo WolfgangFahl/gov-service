@@ -97,14 +97,16 @@ class GOVItem:
             items_html = "".join(f"<li><span>{name}</span></li>" for name in self.names)
         else:
             items_html = "<li><span>Unknown</span></li>"
-        html = f"""<tr>
+        html = f"""<table border="1" style="border:thin solid gray; border-collapse:collapse;">
+<tr>
 <td>GOV-Kennung</td>
 <td><a href="https://gov.genealogy.net/item/show/{self.gov_id}">{self.gov_id}</a></td>
 </tr>
 <tr>
   <td>Name</td>
   <td><ul>{items_html}</ul></td>
-</tr>"""
+</tr>
+</table>"""
         return html
 
 
