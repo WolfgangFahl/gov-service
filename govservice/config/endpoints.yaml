@@ -1,0 +1,11 @@
+# SPARQL endpoints declaration for GOV-Service
+# see https://gov-wiki.genealogy.net/index.php/GOV-Service/Plan
+endpoints:
+  'govb':
+    endpoint: http://localhost:9898/bigdata/sparql
+    website: https://gov-sparql.genealogy.net/
+    database: blazegraph
+    method: POST
+    lang: sparql
+    prefix_sets:
+      - gov

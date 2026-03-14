@@ -1,0 +1,82 @@
+# see https://flit.pypa.io/en/latest/pyproject_toml.html
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gov-service"
+description = "gov-service: A local GOV (Geschichtliches Ortsverzeichnis) server service"
+keywords = ["GOV", "genealogy", "SPARQL", "history", "places"]
+home-page = "https://github.com/WolfgangFahl/gov-service"
+authors = [
+{name = "Wolfgang Fahl", email = "wf@WolfgangFahl.com"}
+]
+maintainers = [
+{ name = "Wolfgang Fahl", email = "wf@WolfgangFahl.com" },
+]
+readme = "README.md"
+license = {text = "Apache-2.0"}
+
+dependencies = [
+    # https://pypi.org/project/pybasemkit/
+    "pybasemkit>=0.1.3",
+    # https://pypi.org/project/fastapi/
+    "fastapi>=0.110.0",
+    # https://pypi.org/project/uvicorn/
+    "uvicorn>=0.29.0",
+    # https://pypi.org/project/pyLodStorage/
+    "pyLodStorage>=0.19.2",
+    #https://pypi.org/project/PyYAML/
+    "PyYAML>=6.0.1",
+]
+
+requires-python = ">=3.10"
+classifiers=[
+"Development Status :: 3 - Alpha",
+"Environment :: Web Environment",
+"Programming Language :: Python :: 3 :: Only",
+"Programming Language :: Python :: 3.10",
+"Programming Language :: Python :: 3.11",
+"Programming Language :: Python :: 3.12",
+"Programming Language :: Python :: 3.13",
+"Operating System :: OS Independent",
+"Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+"Topic :: Software Development :: Libraries :: Python Modules",
+"Intended Audience :: Developers",
+"Intended Audience :: Science/Research",
+"License :: OSI Approved :: Apache Software License"
+]
+dynamic = ["version"]
+
+[tool.hatch.version]
+path = "govservice/__init__.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[project.urls]
+Home = "https://github.com/WolfgangFahl/gov-service"
+Documentation = "https://wiki.genealogy.net/GOV-Service"
+Source = "https://github.com/WolfgangFahl/gov-service"
+
+[project.optional-dependencies]
+test = [
+"pytest>=7.0.0",
+"green",
+]
+dev = [
+"black>=23.0.0",
+"isort>=5.12.0",
+]
+
+[tool.hatch.build.targets.wheel]
+only-include = ["govservice"]
+
+[tool.hatch.build.targets.wheel.sources]
+"govservice" = "govservice"
+
+[project.scripts]
+govservice = "govservice.govservice_cmd:main"
+
+[tool.black]
+line-length = 120

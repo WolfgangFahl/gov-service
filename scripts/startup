@@ -1,0 +1,200 @@
+#!/bin/bash
+# WF 2026-03-14
+# startup job for gov-service
+
+#ansi colors
+#http://www.csc.uvic.ca/~sae/seng265/fall04/tips/s265s047-tips/bash-using-colors.html
+blue='\033[0;34m'
+red='\033[0;31m'
+green='\033[0;32m' # '\e[1;32m' is too bright for white bg.
+endColor='\033[0m'
+
+#
+# a colored message
+#   params:
+#     1: l_color - the color of the message
+#     2: l_msg - the message to display
+#
+color_msg() {
+  local l_color="$1"
+  local l_msg="$2"
+  echo -e "${l_color}$l_msg${endColor}"
+}
+
+#
+# error
+#
+# show the given error message on stderr and exit
+#
+#   params:
+#     1: l_msg - the error message to display
+#
+error() {
+  local l_msg="$1"
+  # use ansi red for error
+  color_msg $red "Error:" 1>&2
+  color_msg $red "\t$l_msg" 1>&2
+  exit 1
+}
+
+#
+# show usage
+#
+usage() {
+  echo "Usage: $0 [options]"
+  echo "Options:"
+  echo "-h  |--help:        Show this message"
+  echo "--gov:              Start gov service"
+  echo "--all:              Start all services"
+  exit 1
+}
+
+#
+# log the given message if we are in verbose mode
+# params
+#   1: msg- the message to show
+#
+log()  {
+  local l_msg="$1"
+  if [ "$verbose" == "true" ]
+  then
+    echo "$l_msg"
+  fi
+}
+
+#
+# start the given python service
+#
+# params
+#   1: name - the name of the service e.g. justpy
+#   2: giturl - the giturl 
+#   3: cmd - the command to run
+#   4: cmd_proc - the command's process list entry to check with pgrep
+#
+start_python_service() { 
+  local l_name=$1
+  local l_giturl=$2
+  local l_cmd=$3
+  local l_cmd_proc="$4"
+  local l_log=$(prepare_logging $l_name)
+  update $l_name $l_giturl true
+  background_service "$l_cmd" "$l_cmd_proc" $l_log
+  log "log is at $l_log"
+}
+
+# 
+#  start service in background
+#  params
+#     1: cmd - shell command to start
+#     2: cmd_proc - how the command shows up in the process list for pgrep
+#     3: log - the log file to use
+#
+background_service() {
+  local l_cmd="$1"
+  local l_cmd_proc="$2"
+  local l_log="$3"
+  # check whether service runs
+  log "checking $l_cmd by looking for $l_cmd_proc in process list"
+  pgrep -fla "$l_cmd_proc"
+  if [ $? -eq 0  ]
+  then
+    log "killing $l_cmd_proc"
+    pkill -f "$l_cmd_proc"
+  fi
+  local l_pwd=$(pwd)
+  log "Running $l_cmd in $l_pwd"
+  nohup $l_cmd > "$l_log" 2>&1 &
+}
+
+#
+# update the given python project
+# 
+# params
+#   1: name
+#   2: giturl
+#   3: do_update: if True actually pull and install
+update() {
+  local l_name=$1
+  local l_giturl=$2
+  local l_do_update=$3
+  local l_srcroot=$HOME/source/python
+  local l_service_root=$l_srcroot/$l_name
+  # check source root is available
+  if [ ! -d $l_srcroot ]
+  then
+    mkdir -p $l_srcroot
+  fi
+  # check service root is available 
+  cd $l_srcroot
+  if [ ! -d $l_service_root ]
+  then
+    # initial clone
+    git clone $l_giturl $l_name
+  fi
+  cd $l_service_root 
+  if [ "$l_do_update" == "true" ]
+  then
+    # get the latest version
+    git pull
+    # create a virtual environment
+    python -m venv .venv
+    # activate it
+    source .venv/bin/activate
+    # upgrade pip if need be
+    pip install --upgrade pip
+    # install everything
+    scripts/install
+  fi
+}
+
+#
+# prepare logging for the given service
+#
+# params
+#   1: name
+prepare_logging() {
+  local l_name=$1
+  local l_logdir=/var/log/$l_name
+  local l_log=$l_logdir/$l_name.log
+  local l_idn=$(id -un)
+  local l_idg=$(id -gn) 
+  if [ ! -d $l_logdir ]
+  then
+    sudo mkdir -p $l_logdir
+  fi
+  sudo chown $l_idn:$l_idg $l_logdir
+  sudo touch $l_log
+  sudo chown $l_idn:$l_idg $l_log
+  echo "$l_log"
+}
+
+# Start the gov service
+start_gov() {
+  start_python_service gov-service https://github.com/WolfgangFahl/gov-service "govservice -s --host localhost" "govservice -s"
+}
+
+cd $HOME
+. .profile
+verbose=true
+if [ $# -lt 1 ]
+then
+  usage
+else
+  while [  "$1" != ""  ]
+  do
+    option="$1"
+    case $option in
+      "-h"|"--help")
+	usage
+      ;;
+      "--gov")
+        start_gov
+      ;;
+      "--all")
+	start_gov
+      ;;
+    esac
+    shift
+  done
+fi
+

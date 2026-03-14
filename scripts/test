@@ -1,0 +1,35 @@
+#!/bin/bash
+# WF 2024-08-03
+# WF 2026-03-14
+
+#ansi colors
+blue='\033[0;34m'
+red='\033[0;31m'
+green='\033[0;32m'
+endColor='\033[0m'
+
+color_msg() {
+  local l_color="$1"
+  local l_msg="$2"
+  echo -e "${l_color}$l_msg${endColor}"
+}
+
+error() {
+  local l_msg="$1"
+  color_msg $red "Error:" 1>&2
+  color_msg $red "\t$l_msg" 1>&2
+  exit 1
+}
+
+negative() {
+  local l_msg="$1"
+  color_msg $red "❌:$l_msg"
+}
+
+positive() {
+  local l_msg="$1"
+  color_msg $green "✅:$l_msg"
+}
+
+export PYTHON_PATH="."
+python3 -m unittest discover

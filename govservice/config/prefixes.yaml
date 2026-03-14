@@ -1,0 +1,13 @@
+# Prefix sets for GOV-Service
+# see https://gov-wiki.genealogy.net/index.php/GOV-Service/Plan
+
+prefix_sets:
+  gov:
+    name: "GOV"
+    wikidata_id: "Q38814612"
+    url: "http://gov.genealogy.net/"
+    description: "Historical Gazetteer"
+    prefixes:
+      gov: "http://gov.genealogy.net/"
+      gp: "http://gov.genealogy.net/ontology.owl#"
+      gt: "http://gov.genealogy.net/types.owl#"

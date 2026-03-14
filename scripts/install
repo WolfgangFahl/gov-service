@@ -1,0 +1,18 @@
+#!/bin/bash
+# WF 2026-03-14
+# Check if running in GitHub Actions and apt-get is available
+if [[ -n "$GITHUB_ACTIONS" && -x "$(command -v apt-get)" ]]; then
+    echo "Running in GitHub Actions with apt-get available. Installing dependencies..."
+    sudo apt-get update
+    sudo apt-get install -y python3-pip
+fi
+
+# Check if pipx is available, install if not
+if ! command -v pipx &> /dev/null; then
+    echo "pipx not found, installing..."
+    python3 -m pip install --user pipx
+    python3 -m pipx ensurepath
+fi
+
+# simple install via pyproject.toml
+pip install .

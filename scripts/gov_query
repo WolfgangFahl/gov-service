@@ -1,0 +1,5 @@
+#!/bin/bash
+# WF 2026-03-14
+# query local GOV Blazegraph database
+BASE="$(dirname "$(dirname "$(readlink -f "$0")")")/govservice/config"
+sparqlquery -ep "$BASE/endpoints.yaml" -pp "$BASE/prefixes.yaml" -qp "$BASE/gov_queries.yaml" -en govb -p "$@"

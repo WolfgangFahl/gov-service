@@ -1,0 +1,15 @@
+# GOV SPARQL Queries Configuration
+# see https://gov-wiki.genealogy.net/index.php/GOV-Service/Plan
+
+'NameByGovId':
+  # Returns GOV-Kennung and Name for /item/show
+  param_list:
+    - name: gov_id
+      type: str
+      default_value: "SCHERGJO54EJ"
+  sparql: |
+    SELECT DISTINCT ?name
+    WHERE {
+      gov:{{ gov_id }} gp:hasName ?name_prop .
+      ?name_prop gp:value ?name .
+    }
