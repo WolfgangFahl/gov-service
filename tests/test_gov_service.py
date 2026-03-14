@@ -95,3 +95,17 @@ class TestGovService(Basetest):
             print(html)
         self.assertIn(GOV_ID, html)
         self.assertIn(EXPECTED_NAME, html)
+
+    def test_item_wikihtml(self):
+        """
+        test /item/wikihtml/SCHERGJO54EJ returns HTML fragment
+        """
+        if self.inPublicCI():
+            return
+        response = self.client.get(f"/item/wikihtml/{GOV_ID}")
+        self.assertEqual(200, response.status_code)
+        html = response.text
+        if self.debug:
+            print(html)
+        self.assertIn(GOV_ID, html)
+        self.assertIn(EXPECTED_NAME, html)

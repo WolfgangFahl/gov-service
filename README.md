@@ -26,7 +26,7 @@ When the service is running (e.g. via `scripts/startup --gov`), you can test the
 
 ```bash
 # HTML (default)
-curl -s http://localhost:8000/item/show/SCHERGJO54EJ
+curl -s http://localhost:8000/item/wikihtml/SCHERGJO54EJ
 
 # JSON via Accept header
 curl -s -H "Accept: application/json" http://localhost:8000/item/show/SCHERGJO54EJ

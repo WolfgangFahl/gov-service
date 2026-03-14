@@ -167,6 +167,7 @@ class GovService:
         """
 
         @self.app.get("/item/show/{gov_id}")
+        @self.app.get("/item/wikihtml/{gov_id}")
         async def item_show(gov_id: str, request: Request, format: Optional[str] = None):
             """
             Return GOV item in the negotiated format (html, json, yaml).
