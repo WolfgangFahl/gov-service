@@ -30,4 +30,4 @@ curl -s http://localhost:8000/item/show/SCHERGJO54EJ
 ```
 
 ## Docs
-[GOV-Service Wiki](https://wiki.genealogy.net/GOV-Service)
+[GOV-Service on GOV-Wiki](https://gov-wiki.genealogy.net/index.php/GOV-Service)
